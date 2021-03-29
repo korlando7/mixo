@@ -1,6 +1,6 @@
-import { EAccidental, EPitch, INote } from "models/model";
+import { EAccidental, ENote, INote } from 'models/model';
 
-export const noteToPosition: {[note: string]: number} = {
+export const noteToPosition: { [note: string]: number } = {
   C: 0,
   'C#': 1,
   Db: 1,
@@ -40,15 +40,16 @@ export const notes: string[] = [
   'Gb'
 ];
 
-export const noteSet: Set<string> = new Set([]);
+export const noteSet: Set<string> = new Set(notes);
 
 export const accidentals: Set<string> = new Set(['', '#', 'b']);
 
-export const NOTE_CENTS = 100;
-export const OCTAVE_CENTS = 1200;
+export const MIDI_MAX = 127;
+export const MIDI_MIN = 21;
 
 export const A4: INote = {
-  pitch: EPitch.A,
+  name: ENote.A,
+  letter: ENote.A,
   accidental: EAccidental.NATURAL,
   midi: 69,
   frequency: 440,

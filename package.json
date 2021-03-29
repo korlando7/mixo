@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "coverage": "jest --coverage",
-    "format": "./node_modules/.bin/prettier --config .prettierrc.json 'src/**/*.ts' --write"
+    "test": "jest --no-cache --coverage",
+    "format": "./node_modules/.bin/prettier --config .prettierrc.json src/**/*.ts --write"
   },
   "repository": {
     "type": "git",

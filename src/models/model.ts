@@ -16,9 +16,8 @@ export type TNote =
   | 'G'
   | 'G#'
   | 'Gb';
-export type TOctave = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
-export enum EPitch {
+export enum ENote {
   C = 'C',
   D = 'D',
   E = 'E',
@@ -35,11 +34,12 @@ export enum EAccidental {
 }
 
 export interface INote {
-  pitch: EPitch;
+  name: string;
+  letter: string;
   accidental: string;
   midi: number;
   frequency: number;
-  octave: TOctave;
+  octave: number;
 }
 
 export interface IScale {

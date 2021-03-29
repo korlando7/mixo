@@ -1,62 +1,59 @@
-import {
-  A4,
-  noteSet,
-  noteToPosition,
-  NOTE_CENTS,
-  OCTAVE_CENTS
-} from 'const/consts';
-import { EPitch, INote, TNote, TOctave } from 'models/model';
+import { A4, MIDI_MAX, MIDI_MIN, noteSet, noteToPosition } from 'const/consts';
+import { EAccidental, ENote, INote, TNote } from 'models/model';
+import { roundNPlaces } from 'utils/math';
 
-const getPitch = (noteName: TNote): EPitch => {
-  if (!noteName) {
-    return null;
-  }
-  return noteName[0] as EPitch;
+const getNoteValue = (noteName: TNote): ENote => {
+  return noteName[0] as ENote;
 };
 
 const getAccidental = (noteName: TNote): string => {
-  if (!noteName) {
-    return null;
+  if (!noteName || !noteName[1]) {
+    return EAccidental.NATURAL;
   }
   return noteName[1];
 };
 
-const getNoteMidiValue = (semitones: number): number => {
-  // TODO: calculate midi value
-  return 0;
-};
-
-const getSemitoneDiff = (pitch: string, octave: number, offset = 0): number => {
-  const refPos = noteToPosition[A4.pitch];
-  const pos = noteToPosition[pitch];
+/**
+ *
+ * @param note - name of incoming note value e.g. C#
+ * @param octave - octave of the incoming note e.g. 7
+ * @param ref - the note data to compare to in order to get the semitone diff
+ * @returns { number } - distance from the note to ref note in semitones (half steps)
+ */
+const getSemitoneDiff = (note: string, octave: number, ref: INote): number => {
+  const refPos = noteToPosition[ref.name];
+  const pos = noteToPosition[note];
   const noteDiff = pos - refPos;
-  const octaveDiff = octave - A4.octave;
-  const cents = noteDiff * NOTE_CENTS + octaveDiff * OCTAVE_CENTS;
-
-  return cents + offset;
+  const octaveDiff = octave - ref.octave;
+  return noteDiff + octaveDiff * 12;
 };
 
-const getNoteFrequency = (semitones: number): number => {
-  // f = a ^ n * 440
-  const a = Math.pow(2, 1 / 12);
-  const n = semitones;
-  const f = Math.pow(a, n) * A4.frequency;
-  return f;
+const getNoteMidiValue = (note: string, octave: number, ref: INote): number => {
+  const semitones = getSemitoneDiff(note, octave, ref);
+  const midiNumber = semitones + ref.midi;
+
+  return midiNumber >= MIDI_MIN && midiNumber <= MIDI_MAX ? midiNumber : null;
 };
 
-export const getNote = (noteName: TNote, octave: TOctave): INote => {
+const getNoteFrequency = (note: string, octave: number, ref: INote): number => {
+  // f = 2 ^ (n/12) * 440
+  const n = getSemitoneDiff(note, octave, ref);
+  return roundNPlaces(Math.pow(2, n / 12) * ref.frequency, 4);
+};
+
+export const getNoteData = (noteName?: TNote, octave?: number): INote => {
   if (!noteName || !noteSet.has(noteName)) {
     return null;
   }
 
-  const pitch = getPitch(noteName);
-  const semitoneDiff = getSemitoneDiff(pitch, octave)
+  const noteLetter = getNoteValue(noteName);
 
   return {
-    pitch,
+    name: noteName,
+    letter: noteLetter,
     accidental: getAccidental(noteName),
-    midi: getNoteMidiValue(semitoneDiff),
-    frequency: getNoteFrequency(semitoneDiff),
+    midi: getNoteMidiValue(noteName, octave, A4),
+    frequency: getNoteFrequency(noteName, octave, A4),
     octave
   };
 };

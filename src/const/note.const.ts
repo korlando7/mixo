@@ -21,23 +21,23 @@ export const noteToPosition: { [note: string]: number } = {
 };
 
 export const notes: string[] = [
+  'Ab',
   'A',
   'A#',
-  'Ab',
-  'B',
   'Bb',
+  'B',
   'C',
   'C#',
+  'Db',
   'D',
   'D#',
-  'Db',
-  'E',
   'Eb',
+  'E',
   'F',
   'F#',
+  'Gb',
   'G',
   'G#',
-  'Gb'
 ];
 
 export const noteSet: Set<string> = new Set(notes);
@@ -46,12 +46,15 @@ export const accidentals: Set<string> = new Set(['', '#', 'b']);
 
 export const MIDI_MAX = 127;
 export const MIDI_MIN = 21;
+export const MIDI_A4 = 69;
+export const FREQUENCY_A4 = 440;
+export const OCTAVE_A4 = 4;
 
 export const A4: INote = {
   name: ENote.A,
   letter: ENote.A,
   accidental: EAccidental.NATURAL,
-  midi: 69,
-  frequency: 440,
-  octave: 4
+  midi: MIDI_A4,
+  frequency: FREQUENCY_A4,
+  octave: OCTAVE_A4
 };

@@ -1,17 +1,8 @@
-import { A4, MIDI_MAX, MIDI_MIN, noteSet, noteToPosition } from 'const/consts';
+import { A4, MIDI_MAX, MIDI_MIN, noteSet, noteToPosition } from 'const/note.const';
 import { EAccidental, ENote, INote, TNote } from 'models/model';
-import { roundNPlaces } from 'utils/math';
+import { roundNPlaces } from 'utils/math.utils';
+import { getAccidental, getNoteValue } from 'utils/note.utils';
 
-const getNoteValue = (noteName: TNote): ENote => {
-  return noteName[0] as ENote;
-};
-
-const getAccidental = (noteName: TNote): string => {
-  if (!noteName || !noteName[1]) {
-    return EAccidental.NATURAL;
-  }
-  return noteName[1];
-};
 
 /**
  *
